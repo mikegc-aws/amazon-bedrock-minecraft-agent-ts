@@ -18,6 +18,18 @@ var __asyncValues = (this && this.__asyncValues) || function (o) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.BedrockBot = void 0;
 const client_bedrock_agent_runtime_1 = require("@aws-sdk/client-bedrock-agent-runtime");
+const config_1 = require("./config");
+function startConfig() {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            const config = yield (0, config_1.loadConfig)();
+        }
+        catch (error) {
+            console.error('Error loading configuration:', error);
+        }
+    });
+}
+startConfig();
 /**
  * Class representing a Bedrock bot.
  */

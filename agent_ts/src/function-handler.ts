@@ -65,7 +65,9 @@ export class MyFunctionHandler implements FunctionHandler {
   It takes in the name parameter and uses it to determine the time.
   */
   private action_get_time(parameters: any): [any, any] {
-    const responseBody = {"time": "12:00:00"};
+    // get server time as string:
+    const time = new Date().toLocaleTimeString();
+    const responseBody = {"time": time};
     const responseState = 'REPROMPT';
     return [responseBody, responseState];
   }
@@ -141,9 +143,19 @@ export class MyFunctionHandler implements FunctionHandler {
   It takes in the name parameter and uses it to determine the player's location.
   */
   private action_get_player_location(parameters: any): [any, any] {
+
+    console.log('Getting player (player_name) location.');
+    console.log(parameters);
+
     const playerName = parameters.player_name;
     const player = this.mcBot.players[playerName]
+
+    console.log('Player:', player)
+
     const pos = player.entity.position
+
+    console.log('Player location:', pos)
+
     const responseBody = {"location": {"x": pos.x ,"y": pos.y, "z": pos.z}};
     const responseState = 'REPROMPT';
     return [responseBody, responseState];

@@ -11,6 +11,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 const bedrock_bot_1 = require("./bedrock-bot");
 const function_handler_1 = require("./function-handler");
+const config_1 = require("./config");
 const mineflayer = require('mineflayer');
 const { pathfinder, Movements, goals: { GoalNear } } = require('mineflayer-pathfinder');
 const collectblock = require('mineflayer-collectblock').plugin;
@@ -21,22 +22,36 @@ function generateUuid() {
     const uuid = `${randomHex.slice(0, 8)}-${randomHex.slice(8, 12)}-${randomHex.slice(12, 16)}-${randomHex.slice(16, 20)}-${randomHex.slice(20)}`;
     return uuid;
 }
-const mcBot = mineflayer.createBot({
-    host: '127.0.0.1',
-    username: 'Claude',
-    auth: 'offline',
-    port: 25565,
-    version: "1.20.1"
-});
-const functionHandler = new function_handler_1.MyFunctionHandler(mcBot);
-const bedrockBot = new bedrock_bot_1.BedrockBot(functionHandler);
-// Set the chat callback
-bedrockBot.setChatCallback(handleChatMessage);
-// Set the session ID to a random GUID
-const uuid = generateUuid;
-bedrockBot.setSessionId(uuid());
-mcBot.once('spawn', initializeBot);
-mcBot.on('chat', handleChatCommands);
+let mcBot;
+let bedrockBot;
+function startBot() {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            const config = yield (0, config_1.loadConfig)();
+            mcBot = mineflayer.createBot({
+                host: config.mcHost,
+                username: config.mcUsername,
+                auth: config.mcAuth,
+                port: config.mcPort,
+                version: config.mcVersion
+            });
+            const functionHandler = new function_handler_1.MyFunctionHandler(mcBot);
+            bedrockBot = new bedrock_bot_1.BedrockBot(functionHandler);
+            // Set the chat callback
+            bedrockBot.setChatCallback(handleChatMessage);
+            // Set the session ID to a random GUID
+            const uuid = generateUuid;
+            bedrockBot.setSessionId(uuid());
+            mcBot.once('spawn', initializeBot);
+            mcBot.on('chat', handleChatCommands);
+        }
+        catch (error) {
+            console.error('Error starting the bot:', error);
+            // Handle the error appropriately
+        }
+    });
+}
+startBot();
 // Chat callback implementation
 function handleChatMessage(message) {
     console.log(`Received chat message: ${message}`);

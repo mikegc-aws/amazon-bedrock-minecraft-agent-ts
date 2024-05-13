@@ -1,6 +1,7 @@
 import { BedrockAgentRuntimeClient, InvokeAgentCommand, InvokeAgentCommandInput, InvokeAgentCommandOutput } from "@aws-sdk/client-bedrock-agent-runtime";
 import { Readable } from 'stream';
 import { MyFunctionHandler } from './function-handler';
+import { Config } from './config';
 
 /**
  * Interface representing a function handler.
@@ -43,12 +44,12 @@ export class BedrockBot {
    * Creates a new instance of the BedrockBot class.
    * @param functionHandler The function handler instance.
    */
-  constructor(functionHandler: MyFunctionHandler) {
+  constructor(functionHandler: MyFunctionHandler, config: Config) {
     // this.logger = new Logger();
     this.logger = console;
     this.bedrockAgentRuntimeClient = new BedrockAgentRuntimeClient({ region: 'us-west-2' });
-    this.agentAliasId = 'DCFT5Y8L8Z';
-    this.agentId = 'DEHCT5KPAE';
+    this.agentAliasId = config.agentAliasId;
+    this.agentId = config.agentId;
     this.functionHandler = functionHandler;
     this.sessionId = null;
     this.chatCallback = null;

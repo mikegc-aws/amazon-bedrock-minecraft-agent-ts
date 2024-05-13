@@ -1,5 +1,9 @@
 import { BedrockBot } from './bedrock-bot';
 import { MyFunctionHandler } from './function-handler';
+import { loadConfig } from './config';
+
+import * as dotenv from 'dotenv';
+dotenv.config();
 
 const mineflayer = require('mineflayer');
 const { pathfinder, Movements, goals: { GoalNear } } = require('mineflayer-pathfinder');
@@ -14,26 +18,43 @@ function generateUuid(): string {
   return uuid;
 }
 
-const mcBot = mineflayer.createBot({
-  host: '127.0.0.1',
-  username: 'Claude',
-  auth: 'offline',
-  port: 25565,
-  version: "1.20.1"
-});
+let mcBot: any;
+let bedrockBot: BedrockBot;
 
-const functionHandler = new MyFunctionHandler(mcBot);
-const bedrockBot = new BedrockBot(functionHandler);
+async function startBot() {
+  try {
+    const config = await loadConfig();
 
-// Set the chat callback
-bedrockBot.setChatCallback(handleChatMessage);
+    console.log('Starting bot...', config);
 
-// Set the session ID to a random GUID
-const uuid = generateUuid;
-bedrockBot.setSessionId(uuid());
+    mcBot = mineflayer.createBot({
+      host: config.mcHost,
+      username: config.mcUsername,
+      auth: config.mcAuth,
+      port: config.mcPort,
+      version: config.mcVersion
+    });
 
-mcBot.once('spawn', initializeBot);
-mcBot.on('chat', handleChatCommands);
+    const functionHandler = new MyFunctionHandler(mcBot);
+    bedrockBot = new BedrockBot(functionHandler, config);
+
+    // Set the chat callback
+    bedrockBot.setChatCallback(handleChatMessage);
+
+    // Set the session ID to a random GUID
+    const uuid = generateUuid;
+    bedrockBot.setSessionId(uuid());
+
+    mcBot.once('spawn', initializeBot);
+    mcBot.on('chat', handleChatCommands);
+} catch (error) {
+  console.error('Error starting the bot:', error);
+  // Handle the error appropriately
+}
+}
+
+startBot();
+
 
 // Chat callback implementation
 function handleChatMessage(message: string) {

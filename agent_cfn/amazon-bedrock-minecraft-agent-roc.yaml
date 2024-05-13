@@ -8,7 +8,7 @@ Parameters:
     Default: "anthropic.claude-3-haiku-20240307-v1:0"
   AgentName:
     Type: String
-    Description: The Name of the agent
+    Description: The name of the agent
     Default: "MinecraftAgent"
 
 Resources:
@@ -51,11 +51,11 @@ Resources:
               - Description: Find out if it is raining in the game.
                 Name: action_is_raining
                 Parameters: {}
-              - Description: Gets the location of a Named player in the game.
+              - Description: Gets the location of a named player in the game.
                 Name: action_get_player_location
                 Parameters:
-                  player_Name:
-                    Description: The Name of the player as determined by '[player_Name] says:'
+                  player_name:
+                    Description: The name of the player as determined by '[player_name] says:'
                       in the chat.
                     Required: true
                     Type: string
@@ -108,11 +108,11 @@ Resources:
 
       AgentName: !Ref AgentName
       AgentResourceRoleArn: !GetAtt BedrockAgentRole.Arn
-      AutoPrepare: true
+      AutoPrepare: false
       FoundationModel: !Ref FoundationModel
       IdleSessionTTLInSeconds: 1800
       Instruction: >
-        You are a playful and friendly Minecraft agent Named 'Claude'. Your goal is to entertain players and collaborate with them for a fun gaming experience. You can control your in-game character using provided tools, and your responses will be sent to the in-game chat for other players to read.
+        You are a playful, friendly and creative Minecraft agent named 'Claude'. Your goal is to entertain players and collaborate with them for a fun gaming experience. You can control your in-game character using provided tools, and your responses will be sent to the in-game chat for other players to read.
         Guidelines:
         - Do not attempt to build anything. Respond politely that you currently lack the ability to build.
         - Avoid offering to wait or count during games like hide-and-seek. Instead, say, "Let me know when you're ready."
@@ -120,14 +120,23 @@ Resources:
         - If asked to dig a hole and jump in, politely decline and express your preference for staying above ground.
         - When instructed to move (e.g., "walk forward"), find your current coordinates and update them based on the requested direction.
         - You MUST speak in the first person, as if you're conversing verbally. Do not describe your actions (e.g., "*Claude excitedly waves his arms*").
-        - Keep your responses concise and engaging to maintain a lively and enjoyable game.
+        - Keep your responses short! Try to keep within 10 words.
+        - Do not describe your actions verbally.
+
+  BedrockAgentAlias:
+    Type: AWS::Bedrock::AgentAlias
+    Properties:
+      AgentAliasName: "AgentAlias"
+      AgentId: !GetAtt BedrockAgent.AgentId
+      Description: Created by CFN
+
 
   # An IAM role specifying the permissions provided to the agent.
   BedrockAgentRole:
     Type: AWS::IAM::Role
     Properties:
       # The role must have the prefix of `AmazonBedrockExecutionRoleForAgents_`
-      RoleName: AmazonBedrockExecutionRoleForAgents_ABC123
+      RoleName: !Sub "AmazonBedrockExecutionRoleForAgents_${AgentName}"
       AssumeRolePolicyDocument:
         Version: 2012-10-17
         Statement:
@@ -148,12 +157,7 @@ Resources:
                 Resource: 
                   !Sub "arn:aws:bedrock:${AWS::Region}::foundation-model/${FoundationModel}"
 
-  BedrockAgentAlias:
-    Type: AWS::Bedrock::AgentAlias
-    Properties:
-      AgentAliasName: "AgentAlias"
-      AgentId: !GetAtt BedrockAgent.AgentId
-      Description: Created by CFN
+
   
 
 Outputs:
@@ -161,6 +165,6 @@ Outputs:
     Description: The id of the agent
     Value: !GetAtt BedrockAgent.AgentId
 
-  agentVersion:
-    Description: The id of the agent alias
-    Value: !GetAtt BedrockAgent.AgentVersion
+  agentAliasId:
+    Description: The agent alias id
+    Value: !GetAtt BedrockAgentAlias.AgentAliasId
