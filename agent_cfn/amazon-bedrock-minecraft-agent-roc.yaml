@@ -78,9 +78,13 @@ Resources:
                 Name: action_collect_block
                 Parameters:
                   block_type:
-                    Description: The type of block to collect. This must be a valid Minecraft block type. e.g. 'acacia_log'
+                    Description: The type of block to collect.
                     Required: true
                     Type: string
+                  count:
+                    Description: The number of blocks to try and collect.
+                    Required: true
+                    Type: number
 
         - ActionGroupName: MinecraftCalculations
           ActionGroupState: ENABLED
