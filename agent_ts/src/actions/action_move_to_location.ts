@@ -7,14 +7,16 @@ export async function action_move_to_location(mcBot: any, mcData: any, parameter
   console.log('location_y:', location_y);
   console.log('location_z:', location_z);
 
-  await mcBot.pathfinder.setGoal(new GoalNear(
+  await mcBot.pathfinder.goto(new GoalNear(
     location_x,
     location_y,
     location_z,
     1
   ));
 
-  const responseBody = { "message": "Moving to location, please wait." };
+  console.log('isMoving:', mcBot.pathfinder.isMoving());
+
+  const responseBody = { "message": "Arrived at location." };
   const responseState = 'REPROMPT';
   return [responseBody, responseState];
 }
