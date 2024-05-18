@@ -59,7 +59,7 @@ Resources:
                       in the chat.
                     Required: true
                     Type: string
-              - Description: Move by walking to a give location in the game.
+              - Description: Move by walking to a given location in the game.
                 Name: action_move_to_location
                 Parameters:
                   location_x:
@@ -74,6 +74,13 @@ Resources:
                     Description: Z coordinate in the game.
                     Required: true
                     Type: number
+              - Description: Collect or harvest a block type
+                Name: action_collect_block
+                Parameters:
+                  block_type:
+                    Description: The type of block to collect. This must be a valid Minecraft block type. e.g. 'acacia_log'
+                    Required: true
+                    Type: string
 
         - ActionGroupName: MinecraftCalculations
           ActionGroupState: ENABLED

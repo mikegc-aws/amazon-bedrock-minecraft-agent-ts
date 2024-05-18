@@ -1,5 +1,5 @@
 import { BedrockBot } from './bedrock-bot';
-import { MyFunctionHandler } from './function-handler';
+import { MyFunctionHandler } from './action-handler';
 import { loadConfig } from './config';
 
 import * as dotenv from 'dotenv';
@@ -19,6 +19,7 @@ function generateUuid(): string {
 }
 
 let mcBot: any;
+let mcData: any;
 let bedrockBot: BedrockBot;
 
 async function startBot() {
@@ -35,7 +36,9 @@ async function startBot() {
       version: config.mcVersion
     });
 
-    const functionHandler = new MyFunctionHandler(mcBot);
+    mcData = require('minecraft-data')(config.mcVersion);
+
+    const functionHandler = new MyFunctionHandler(mcBot, mcData);
     bedrockBot = new BedrockBot(functionHandler, config);
 
     // Set the chat callback

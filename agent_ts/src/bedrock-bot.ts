@@ -1,6 +1,6 @@
 import { BedrockAgentRuntimeClient, InvokeAgentCommand, InvokeAgentCommandInput, InvokeAgentCommandOutput } from "@aws-sdk/client-bedrock-agent-runtime";
 import { Readable } from 'stream';
-import { MyFunctionHandler } from './function-handler';
+import { MyFunctionHandler } from './action-handler';
 import { Config } from './config';
 
 /**
