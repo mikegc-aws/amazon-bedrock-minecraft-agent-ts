@@ -78,6 +78,31 @@ function initializeBot() {
   console.log('Bot spawned');
 }
 
+
+/****
+ * 
+ *  Experimental 
+ * 
+ */
+
+// // Function to return a data object with details of the current game:
+// function gameDetails(): String {
+
+//   // Information about players...
+//   const playerLocations: string[] = [];
+//   for (const playerName in mcBot.players) {
+//     const player = mcBot.players[playerName];
+//     const pos = player.entity.position;
+//     playerLocations.push(` - Name:"${playerName}" {\"Location\":{\"x\": ${pos.x}, \"y\": ${pos.y}, \"z\": ${pos.z}}}\n`);
+//   }
+
+//   // Information about the environment:
+//   const time = new Date().toLocaleTimeString();
+//   const isRaining = mcBot.isRaining ? "Yes" : "No";
+
+//   return "Players:\n" + playerLocations.join('') + "Time: " + time + "\nRaining: " + isRaining
+// }
+
 async function handleChatCommands(username: string, message: string) {
 
   mcBot.time = 6000
@@ -91,7 +116,13 @@ async function handleChatCommands(username: string, message: string) {
       mcBot.chat('Session reset');
       break;
 
+    case 'stop':
+      mcBot.chat('Stopping bot...');
+      mcBot.clearControlStates()
+      break;
+
     default:
+      // const prompt = `<GAMEDATA>${gameDetails()}</GAMEDATA>\n${username} says: ${message}`;
       const prompt = `${username} says: ${message}`;
       await bedrockBot.chatWithAgent(prompt);
   }

@@ -19,6 +19,7 @@ export async function action_dig(mcBot: any, mcData: any, parameters: any): Prom
             console.log('Target block:', targetBlock.position);
 
             if (targetBlock && targetBlock.diggable) {
+              await mcBot.creative.flyTo(targetBlock.position.offset(0, -y+1, 0));
               await mcBot.dig(targetBlock);
             } else {
               console.log('Block not found or not diggable:', targetBlock.name);
@@ -30,6 +31,9 @@ export async function action_dig(mcBot: any, mcData: any, parameters: any): Prom
   } catch (err) {
     console.error('Error during circle digging operation:', err);
   }
+
+  await mcBot.creative.flyTo(block.position.floored());
+  mcBot.creative.stopFlying();
 
   const responseBody = { "message": "Done digging." };
   const responseState = 'REPROMPT';

@@ -33,6 +33,8 @@ export async function action_collect_block(mcBot: any, mcData: any, parameters: 
 
     var result = "Could not find blocks with name:" + block_type
 
+    var collectedCount = 0;
+
     // Collect the blocks. 
     if (foundBlocks) {
         try {
@@ -41,8 +43,9 @@ export async function action_collect_block(mcBot: any, mcData: any, parameters: 
             const block = foundBlocks[i];
             // await mcBot.collectBlock.collect(block);
             await collect_block(mcBot, block);
+            collectedCount++;
           }
-          result = "Blocks collected."
+          result = `Collected ${collectedCount} blocks.`;
         } catch (err) {
           console.error('Error collecting grass:', err);
           result = "Error collecting blocks."
