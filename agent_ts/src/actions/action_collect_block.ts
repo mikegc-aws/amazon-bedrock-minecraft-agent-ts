@@ -45,7 +45,7 @@ export async function action_collect_block(mcBot: any, mcData: any, parameters: 
             await collect_block(mcBot, block);
             collectedCount++;
           }
-          result = `Collected ${collectedCount} blocks.`;
+          result = `Collected ${collectedCount} blocks of ${block_type}.`;
         } catch (err) {
           console.error('Error collecting grass:', err);
           result = "Error collecting blocks."
