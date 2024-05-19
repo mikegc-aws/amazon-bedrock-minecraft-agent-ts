@@ -10,6 +10,7 @@ import { action_get_distance_between_to_entities } from './actions/action_get_di
 import { action_collect_block } from './actions/action_collect_block';
 import { action_find_entity } from './actions/action_find_entity';
 import { action_attack_nearest_entity } from './actions/action_attack_nearest_entity';
+import { action_build } from './actions/build/action_build';
 
 export interface FunctionHandler {
   callFunction(functionName: string, parameters: any): Promise<[any, any]>;
@@ -74,6 +75,9 @@ export class MyFunctionHandler implements FunctionHandler {
 
       case 'action_attack_nearest_entity':
         return await action_attack_nearest_entity(this.mcBot, this.mcData, unpackedParams);
+
+      case 'action_build':
+        return await action_build(this.mcBot, this.mcData, unpackedParams);
 
       default:
         throw new Error(`Unknown function: ${functionName}`);

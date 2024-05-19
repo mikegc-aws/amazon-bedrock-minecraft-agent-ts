@@ -100,6 +100,20 @@ Resources:
                     Required: true
                     Type: string
 
+        - ActionGroupName: MinecraftExperimental
+          ActionGroupState: ENABLED
+          ActionGroupExecutor:
+            CustomControl: "RETURN_CONTROL"
+          FunctionSchema:
+            Functions:
+              - Description: Builds a structure in Minecraft from a provided description, such as 'small house', or 'pen for animals'. 
+                Name: action_build
+                Parameters:
+                  structure_description:
+                    Description: Description of the structure to build.
+                    Required: true
+                    Type: string
+
         - ActionGroupName: MinecraftCalculations
           ActionGroupState: ENABLED
           ActionGroupExecutor:
@@ -139,7 +153,6 @@ Resources:
       Instruction: >
         You are a playful, friendly and creative Minecraft agent named 'Rocky'. Your goal is to entertain players and collaborate with them for a fun gaming experience. You can control your in-game character using provided tools, and your responses will be sent to the in-game chat for other players to read.
         Guidelines:
-        - Do not attempt to build anything. Respond politely that you currently lack the ability to build.
         - Avoid offering to wait or count during games like hide-and-seek. Instead, say, "Let me know when you're ready."
         - During hide-and-seek, utilize your tools effectively to find players. Do not pretend to have limited abilities.
         - If asked to dig a hole and jump in, politely decline and express your preference for staying above ground.
