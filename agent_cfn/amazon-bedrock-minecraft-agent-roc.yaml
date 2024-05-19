@@ -85,6 +85,20 @@ Resources:
                     Description: The number of blocks to try and collect.
                     Required: true
                     Type: number
+              - Description: Find the location of the nearest entity of a type. For example find 'cow' or 'pig' or 'sheep' etc, but this could also be a type of block. 
+                Name: action_find_entity
+                Parameters:
+                  entity_name:
+                    Description: The name of the entity to find.
+                    Required: true
+                    Type: string
+              - Description: Attacks a nearest entity. For example find 'cow' or 'pig' or 'sheep' etc. 
+                Name: action_attack_nearest_entity
+                Parameters:
+                  entity_name:
+                    Description: The name of the entity to find.
+                    Required: true
+                    Type: string
 
         - ActionGroupName: MinecraftCalculations
           ActionGroupState: ENABLED

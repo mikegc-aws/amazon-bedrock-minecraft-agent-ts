@@ -8,6 +8,8 @@ import { action_get_player_location } from './actions/action_get_player_location
 import { action_move_to_location } from './actions/action_move_to_location';
 import { action_get_distance_between_to_entities } from './actions/action_get_distance_between_to_entities';
 import { action_collect_block } from './actions/action_collect_block';
+import { action_find_entity } from './actions/action_find_entity';
+import { action_attack_nearest_entity } from './actions/action_attack_nearest_entity';
 
 export interface FunctionHandler {
   callFunction(functionName: string, parameters: any): Promise<[any, any]>;
@@ -66,6 +68,12 @@ export class MyFunctionHandler implements FunctionHandler {
 
       case 'action_collect_block':
         return await action_collect_block(this.mcBot, this.mcData, unpackedParams);
+
+      case 'action_find_entity':
+        return await action_find_entity(this.mcBot, this.mcData, unpackedParams);
+
+      case 'action_attack_nearest_entity':
+        return await action_attack_nearest_entity(this.mcBot, this.mcData, unpackedParams);
 
       default:
         throw new Error(`Unknown function: ${functionName}`);
