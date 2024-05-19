@@ -1,3 +1,5 @@
+const { pathfinder, Movements, goals: { GoalNear } } = require('mineflayer-pathfinder');
+
 export async function action_dig(mcBot: any, mcData: any, parameters: any): Promise<[any, any]> {
   const { depth, width } = parameters;
 
@@ -18,9 +20,21 @@ export async function action_dig(mcBot: any, mcData: any, parameters: any): Prom
 
             console.log('Target block:', targetBlock.position);
 
-            if (targetBlock && targetBlock.diggable) {
-              await mcBot.creative.flyTo(targetBlock.position.offset(0, -y+1, 0));
+            // if (targetBlock && targetBlock.diggable) {
+            if (targetBlock) {
+
+              if (y > -2){
+                // For shallow holes hover above...
+                await mcBot.creative.flyTo(targetBlock.position.offset(0, -y+1, 0));
+              } else {
+                // Once the bot gets deeper don't fly anymore. 
+                await mcBot.pathfinder.goto(new GoalNear(
+                  targetBlock.position.offset(0, y+1, 0),
+                  1
+                ));
+              }
               await mcBot.dig(targetBlock);
+            
             } else {
               console.log('Block not found or not diggable:', targetBlock.name);
             }
