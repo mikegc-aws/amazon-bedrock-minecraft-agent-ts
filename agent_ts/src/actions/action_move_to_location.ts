@@ -7,6 +7,8 @@ export async function action_move_to_location(mcBot: any, mcData: any, parameter
   console.log('location_y:', location_y);
   console.log('location_z:', location_z);
 
+  mcBot.chat("On my way...")
+
   await mcBot.pathfinder.goto(new GoalNear(
     location_x,
     location_y,
