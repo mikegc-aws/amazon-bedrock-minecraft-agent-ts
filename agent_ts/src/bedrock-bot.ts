@@ -1,4 +1,17 @@
-import { BedrockAgentRuntimeClient, InvokeAgentCommand, InvokeAgentCommandInput, InvokeAgentCommandOutput } from "@aws-sdk/client-bedrock-agent-runtime";
+/**
+ * This code defines a BedrockBot class that interacts with the Amazon Bedrock Agent Runtime to
+ * enable a Return Control functionality. The class handles invoking the agent, processing the
+ * agent's responses, and managing the chat session. It also provides a way to set a chat
+ * callback function to handle incoming chat messages. The class relies on a FunctionHandler
+ * implementation to execute specific functions on behalf of the agent's Return Control messages.
+ */
+
+import { 
+  BedrockAgentRuntimeClient, 
+  InvokeAgentCommand, 
+  InvokeAgentCommandInput, 
+  InvokeAgentCommandOutput 
+} from "@aws-sdk/client-bedrock-agent-runtime";
 import { Readable } from 'stream';
 import { MyFunctionHandler } from './action-handler';
 import { Config } from './config';
@@ -45,7 +58,6 @@ export class BedrockBot {
    * @param functionHandler The function handler instance.
    */
   constructor(functionHandler: MyFunctionHandler, config: Config) {
-    // this.logger = new Logger();
     this.logger = console;
     this.bedrockAgentRuntimeClient = new BedrockAgentRuntimeClient({ region: 'us-west-2' });
     this.agentAliasId = config.agentAliasId;
@@ -104,18 +116,17 @@ export class BedrockBot {
         sessionState: sessionState,
       };
 
-      this.logger.info('INPUT: ', input);
+      this.logger.debug('INPUT: ', input);
   
       const command = new InvokeAgentCommand(input);
-
-      this.logger.info('COMMAND: ', command);
+      this.logger.debug('COMMAND: ', command);
 
       const response: InvokeAgentCommandOutput = await this.bedrockAgentRuntimeClient.send(command);
-  
-      this.logger.info('RESPONSE: ', response);
+      this.logger.debug('RESPONSE: ', response);
 
       const processedResponse = await this.processResponse(response);
       return processedResponse;
+
     } catch (error) {
       console.error('Error invoking agent:', error);
       // Add additional error handling logic here, such as retrying the operation or providing a fallback response

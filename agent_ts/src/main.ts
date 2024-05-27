@@ -78,10 +78,9 @@ function initializeBot() {
   console.log('Bot spawned');
 }
 
-
 /****
  * 
- *  Experimental 
+ *  Experimental - Add some in game awareness to the prompt.
  * 
  */
 
@@ -107,14 +106,28 @@ async function handleChatCommands(username: string, message: string) {
 
   mcBot.time = 6000
 
-  if (username === mcBot.username) return;
+  if (username === mcBot.username || 
+      message.includes('Teleport')
+    ) return;
+
+  // System style messages, for example to set the 
+  // weather or set the time seem to end in a ']'
+  // let's use this (hacky) to ignore this kind of
+  // message. 
+  if (message.endsWith(']')) {
+    return;
+  }
 
   switch (message) {
+
     case 'reset':
       const uuid = generateUuid;
       bedrockBot.setSessionId(uuid());
       mcBot.chat('Session reset');
       break;
+
+    case 'Set the time to 1000]':
+      return;
 
     case 'stop':
       mcBot.chat('Stopping bot...');
@@ -122,6 +135,7 @@ async function handleChatCommands(username: string, message: string) {
       break;
 
     default:
+      // Experimental - front loading game data.
       // const prompt = `<GAMEDATA>${gameDetails()}</GAMEDATA>\n${username} says: ${message}`;
       const prompt = `${username} says: ${message}`;
       await bedrockBot.chatWithAgent(prompt);
