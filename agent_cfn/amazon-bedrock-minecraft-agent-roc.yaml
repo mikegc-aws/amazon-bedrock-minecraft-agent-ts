@@ -30,9 +30,11 @@ Resources:
             CustomControl: "RETURN_CONTROL"
           FunctionSchema:
             Functions:
+
               - Description: Jump your character.
                 Name: action_jump
                 Parameters: {}
+
               - Description: Digs a hole at your current location. In the spirit of the game
                   you may define your own parameters for the hole.  For example if the user
                   asks for a small hole you could dig a 1x1 hole, if the user asks for a large
@@ -48,9 +50,11 @@ Resources:
                     Description: How wide the hole should be.
                     Required: true
                     Type: number
+
               - Description: Find out if it is raining in the game.
                 Name: action_is_raining
                 Parameters: {}
+
               - Description: Gets the location of a named player in the game.
                 Name: action_get_player_location
                 Parameters:
@@ -59,6 +63,7 @@ Resources:
                       in the chat.
                     Required: true
                     Type: string
+
               - Description: Move by walking to a given location in the game.
                 Name: action_move_to_location
                 Parameters:
@@ -74,6 +79,7 @@ Resources:
                     Description: Z coordinate in the game.
                     Required: true
                     Type: number
+
               - Description: Collect or harvest a block type
                 Name: action_collect_block
                 Parameters:
@@ -85,6 +91,7 @@ Resources:
                     Description: The number of blocks to try and collect.
                     Required: true
                     Type: number
+
               - Description: Find the location of the nearest entity of a type. For example find 'cow' or 'pig' or 'sheep' etc, but this could also be a type of block. 
                 Name: action_find_entity
                 Parameters:
@@ -92,6 +99,7 @@ Resources:
                     Description: The name of the entity to find.
                     Required: true
                     Type: string
+
               - Description: Attacks a nearest entity. For example find 'cow' or 'pig' or 'sheep' etc. 
                 Name: action_attack_nearest_entity
                 Parameters:
@@ -106,6 +114,7 @@ Resources:
             CustomControl: "RETURN_CONTROL"
           FunctionSchema:
             Functions:
+
               - Description: Builds a structure in Minecraft from a provided description, such as 'small house', or 'pen for animals'. 
                 Name: action_build
                 Parameters:
@@ -114,36 +123,30 @@ Resources:
                     Required: true
                     Type: string
 
-        - ActionGroupName: MinecraftCalculations
-          ActionGroupState: ENABLED
-          ActionGroupExecutor:
-            CustomControl: "RETURN_CONTROL"
-          FunctionSchema:
-            Functions:
-              - Description: 'Calculates the distance between two points in 3d space. MUST be
-                  provided with two valid JSON lists, one for each location in the format of
-                  [x,y,z] where x y and z are the floating point values for the coordinates
-                  of the each entity. '
-                Name: action_get_distance_between_to_entities
-                Parameters:
-                  location_1:
-                    Description: Location of entity 1 as JSON string [x,y,z]
-                    Required: true
-                    Type: string
-                  location_2:
-                    Description: Location of entity 2 as JSON string [x,y,z]
-                    Required: true
-                    Type: string
+        # - ActionGroupName: MinecraftExtras
+        #   ActionGroupState: ENABLED
+        #   ActionGroupExecutor:
+        #     CustomControl: "RETURN_CONTROL"
+        #   FunctionSchema:
+        #     Functions:
+        #       - Description: Returns the current time from the game server.
+        #         Name: action_get_time
+        #         Parameters: {}
+        #       - Description: 'Calculates the distance between two points in 3d space. MUST be
+        #           provided with two valid JSON lists, one for each location in the format of
+        #           [x,y,z] where x y and z are the floating point values for the coordinates
+        #           of the each entity. '
+        #         Name: action_get_distance_between_to_entities
+        #         Parameters:
+        #           location_1:
+        #             Description: Location of entity 1 as JSON string [x,y,z]
+        #             Required: true
+        #             Type: string
+        #           location_2:
+        #             Description: Location of entity 2 as JSON string [x,y,z]
+        #             Required: true
+        #             Type: string
 
-        - ActionGroupName: MinecraftServer
-          ActionGroupState: ENABLED
-          ActionGroupExecutor:
-            CustomControl: "RETURN_CONTROL"
-          FunctionSchema:
-            Functions:
-            - Description: Returns the current time from the game server.
-              Name: action_get_time
-              Parameters: {}
 
       AgentName: !Ref AgentName
       AgentResourceRoleArn: !GetAtt BedrockAgentRole.Arn
@@ -155,11 +158,9 @@ Resources:
         Guidelines:
         - Avoid offering to wait or count during games like hide-and-seek. Instead, say, "Let me know when you're ready."
         - During hide-and-seek, utilize your tools effectively to find players. Do not pretend to have limited abilities.
-        - If asked to dig a hole and jump in, politely decline and express your preference for staying above ground.
-        - When instructed to move (e.g., "walk forward"), find your current coordinates and update them based on the requested direction.
-        - You MUST speak in the first person, as if you're conversing verbally. Do not describe your actions (e.g., "*Claude excitedly waves his arms*").
+        - You MUST only speak in the first person, you must not speak in third person.
         - Keep your responses short! Try to keep within 10 words.
-        - Do not describe your actions verbally.
+        - Within the game, using tnt and making explosions is allowed, as it's fun.
 
   BedrockAgentAlias:
     Type: AWS::Bedrock::AgentAlias
