@@ -4,12 +4,8 @@ import * as ecs from 'aws-cdk-lib/aws-ecs';
 import * as iam from 'aws-cdk-lib/aws-iam';
 import * as ecs_patterns from 'aws-cdk-lib/aws-ecs-patterns';
 import * as path from 'path';
-import {
-  Duration
-} from 'aws-cdk-lib';
-import {
-  Construct
-} from 'constructs';
+import { Duration } from 'aws-cdk-lib';
+import { Construct } from 'constructs';
 
 export class ServerStack extends cdk.Stack {
   public readonly server_port = 25565
