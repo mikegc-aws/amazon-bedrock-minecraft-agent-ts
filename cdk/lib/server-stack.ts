@@ -10,7 +10,7 @@ import { Construct } from 'constructs';
 export class ServerStack extends cdk.Stack {
   public readonly server_port = 25565
   public readonly vpc: ec2.Vpc;
-  public readonly botName = "Claude"
+  public readonly botName = "Rocky"
   public readonly agentAliasID =""
   public readonly agentID = ""
 
