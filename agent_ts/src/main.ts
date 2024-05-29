@@ -1,5 +1,5 @@
 import { BedrockBot } from './bedrock-bot';
-import { MyFunctionHandler } from './function-handler';
+import { MyFunctionHandler } from './action-handler';
 import { loadConfig } from './config';
 
 import * as dotenv from 'dotenv';
@@ -19,6 +19,7 @@ function generateUuid(): string {
 }
 
 let mcBot: any;
+let mcData: any;
 let bedrockBot: BedrockBot;
 
 async function startBot() {
@@ -35,7 +36,9 @@ async function startBot() {
       version: config.mcVersion
     });
 
-    const functionHandler = new MyFunctionHandler(mcBot);
+    mcData = require('minecraft-data')(config.mcVersion);
+
+    const functionHandler = new MyFunctionHandler(mcBot, mcData);
     bedrockBot = new BedrockBot(functionHandler, config);
 
     // Set the chat callback
@@ -75,20 +78,65 @@ function initializeBot() {
   console.log('Bot spawned');
 }
 
+/****
+ * 
+ *  Experimental - Add some in game awareness to the prompt.
+ * 
+ */
+
+// // Function to return a data object with details of the current game:
+// function gameDetails(): String {
+
+//   // Information about players...
+//   const playerLocations: string[] = [];
+//   for (const playerName in mcBot.players) {
+//     const player = mcBot.players[playerName];
+//     const pos = player.entity.position;
+//     playerLocations.push(` - Name:"${playerName}" {\"Location\":{\"x\": ${pos.x}, \"y\": ${pos.y}, \"z\": ${pos.z}}}\n`);
+//   }
+
+//   // Information about the environment:
+//   const time = new Date().toLocaleTimeString();
+//   const isRaining = mcBot.isRaining ? "Yes" : "No";
+
+//   return "Players:\n" + playerLocations.join('') + "Time: " + time + "\nRaining: " + isRaining
+// }
+
 async function handleChatCommands(username: string, message: string) {
 
   mcBot.time = 6000
 
-  if (username === mcBot.username) return;
+  if (username === mcBot.username || 
+      message.includes('Teleport')
+    ) return;
+
+  // System style messages, for example to set the 
+  // weather or set the time seem to end in a ']'
+  // let's use this (hacky) to ignore this kind of
+  // message. 
+  if (message.endsWith(']')) {
+    return;
+  }
 
   switch (message) {
+
     case 'reset':
       const uuid = generateUuid;
       bedrockBot.setSessionId(uuid());
       mcBot.chat('Session reset');
       break;
 
+    case 'Set the time to 1000]':
+      return;
+
+    case 'stop':
+      mcBot.chat('Stopping bot...');
+      mcBot.clearControlStates()
+      break;
+
     default:
+      // Experimental - front loading game data.
+      // const prompt = `<GAMEDATA>${gameDetails()}</GAMEDATA>\n${username} says: ${message}`;
       const prompt = `${username} says: ${message}`;
       await bedrockBot.chatWithAgent(prompt);
   }

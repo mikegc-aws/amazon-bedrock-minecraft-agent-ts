@@ -90,7 +90,7 @@ class MyFunctionHandler {
             console.log('Width:', width);
             this.mcBot.entity.pitch = -1; // Look down...
             const block = this.mcBot.blockAtCursor(256); // Retrieve the block that the bot is currently targeting
-            console.log('Target block:', block.name);
+            // console.log('Target block:', block.name);
             try {
                 // Loop to dig a circular hole with a specified radius and depth
                 for (let y = 0; y > -depth; y--) {
@@ -130,12 +130,12 @@ class MyFunctionHandler {
     */
     action_get_player_location(parameters) {
         console.log('Getting player (player_name) location.');
-        console.log(parameters);
+        // console.log(parameters);
         const playerName = parameters.player_name;
         const player = this.mcBot.players[playerName];
-        console.log('Player:', player);
+        // console.log('Player:', player);
         const pos = player.entity.position;
-        console.log('Player location:', pos);
+        // console.log('Player location:', pos);
         const responseBody = { "location": { "x": pos.x, "y": pos.y, "z": pos.z } };
         const responseState = 'REPROMPT';
         return [responseBody, responseState];
@@ -147,9 +147,9 @@ class MyFunctionHandler {
     action_move_to_location(parameters) {
         return __awaiter(this, void 0, void 0, function* () {
             const { location_x, location_y, location_z } = parameters;
-            console.log('location_x:', location_x);
-            console.log('location_y:', location_y);
-            console.log('location_z:', location_z);
+            // console.log('location_x:', location_x);
+            // console.log('location_y:', location_y);
+            // console.log('location_z:', location_z);
             yield this.mcBot.pathfinder.setGoal(new GoalNear(location_x, location_y, location_z, 1));
             const responseBody = { "message": "Moving to location, please wait." };
             const responseState = 'REPROMPT';
