@@ -15,6 +15,7 @@
     "ts-node": "^10.9.2"
   },
   "scripts": {
-    "start:dev": "nodemon"
+    "start:dev": "nodemon",
+    "build": "tsc"
   }
 }
